@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>心声回复查询系统</title>
+    <style>
+        body { 
+            font-family: 'Microsoft YaHei', sans-serif; 
+            max-width: 600px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .header { text-align: center; margin-bottom: 30px; }
+        .input-area { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        input[type="text"] {
+            width: 200px;
+            padding: 12px;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .reply-card {
+            background: white;
+            padding: 25px;
+            margin-top: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #FF6B6B;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💌 学长学姐的回信</h1>
+        <p>输入你的问卷编号，查收专属回复</p>
+    </div>
+    
+    <div class="input-area">
+        <h3>请输入8位问卷编号：</h3>
+        <input type="text" id="codeInput" placeholder="例：AB12CD34">
+        <button onclick="queryReply()">查询回复</button>
+    </div>
+    
+    <div id="replyResult" class="reply-card">
+        <h3>给 <span id="studentCode"></span> 的回信</h3>
+        <div id="replyContent" style="line-height: 1.6; margin: 20px 0;"></div>
+        <div style="color: #666; text-align: right;">
+            —— <span id="replyBy"></span> 
+            <span id="replyTime"></span>
+            <span id="emoji" style="margin-left: 10px;"></span>
+        </div>
+    </div>
+    
+    <script>
+    // ============ 这里是回复数据 ============
+    // 你可以修改下面的数据，格式不要变
+    const replyData = {
+        "AB12CD34": {
+            content: "学弟/学妹你好，看到你的问卷，我特别理解你现在的压力。高三的时候，我也曾每天对着书桌发呆，觉得未来一片迷茫...但请相信，这段时光会成为你宝贵的财富。现在回头看看，那些深夜的坚持、每一次的自我怀疑和战胜，都让我变成了更好的自己。记住，你不是一个人在战斗，有什么困惑随时可以问我们！",
+            by: "张华学长",
+            time: "2024.01.20",
+            emoji: "✨"
+        },
+        "EF56GH78": {
+            content: "你好呀！看到你说最近睡眠不好，真的特别心疼。我高三时也经常失眠，后来发现听一些白噪音（比如雨声）很有帮助。还有，睡前把明天的三个小目标写下来，而不是在脑子里反复想，会减轻焦虑。试试看，希望你能睡个好觉！",
+            by: "李梅学姐",
+            time: "2024.01.21",
+            emoji: "🌙"
+        },
+        "IJ90KL12": {
+            content: "同学你好！关于你提到的和父母沟通的问题，我想说这真的很正常。代沟不是你的错，也不是父母的错。我建议你可以试试'书信沟通'——把想说的话写在纸上给爸妈。很多时候，文字比语言更能表达情感。试试每周给父母写一封信，你会发现不一样的他们。",
+            by: "王明学长",
+            time: "2024.01.22",
+            emoji: "💌"
+        }
+        // 你可以继续在这里添加更多回复
+        // 格式："问卷编号": { content: "...", by: "...", time: "...", emoji: "..." }
+    };
+    
+    function queryReply() {
+        const code = document.getElementById('codeInput').value.trim().toUpperCase();
+        
+        if (!code) {
+            alert('请输入问卷编号！');
+            return;
+        }
+        
+        if (replyData[code]) {
+            document.getElementById('studentCode').textContent = code;
+            document.getElementById('replyContent').innerHTML = replyData[code].content.replace(/\n/g, '<br>');
+            document.getElementById('replyBy').textContent = replyData[code].by;
+            document.getElementById('replyTime').textContent = ' · ' + replyData[code].time;
+            document.getElementById('emoji').textContent = replyData[code].emoji;
+            document.getElementById('replyResult').style.display = 'block';
+            
+            // 滚动到结果位置
+            document.getElementById('replyResult').scrollIntoView({ behavior: 'smooth' });
+        } else {
+            alert('没有找到这个编号的回复，请检查：\n1. 是否输入正确（8位字母数字）\n2. 是否已收到回复\n3. 稍后再试');
+        }
+    }
+    
+    // 支持按回车键查询
+    document.getElementById('codeInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            queryReply();
+        }
+    });
+    </script>
+</body>
+</html>
